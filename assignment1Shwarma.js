@@ -6,7 +6,8 @@ const OrderState = Object.freeze({
     TOPPINGS:   Symbol("toppings"),
     DRINKS:  Symbol("drinks"),
     SECOND_ITEM : Symbol("roti"),
-    THIRD_ITEM : Symbol("samosa")
+    THIRD_ITEM : Symbol("samosa"),
+    FOURTH_ITEM : Symbol('item')
 });
 
 module.exports = class ShwarmaOrder extends Order{
@@ -18,7 +19,8 @@ module.exports = class ShwarmaOrder extends Order{
         this.sDrinks = "";
         this.sItem = "shawarama";
         this.sItem2 = "butterNan";
-        this.sItem3 = "samosa"
+        this.sItem3 = "samosa";
+        this.sItem4 = "fourth"
     }
     handleInput(sInput){
         let aReturn = [];
@@ -50,18 +52,30 @@ module.exports = class ShwarmaOrder extends Order{
                 aReturn.push("Would you like to order samosa?")
                 break;
             case OrderState.THIRD_ITEM:
-                this.stateCur = OrderState.DRINKS
+                this.stateCur = OrderState.FOURTH_ITEM
                 this.sItem3 = sInput;
-                aReturn.push("Would you like to order drinks?")
+                aReturn.push("Would you like to order anything else?")
                 break;
+
+            case OrderState.FOURTH_ITEM:
+                this.stateCur = OrderState.DRINKS
+                    if(sInput){
+                        this.sItem4 = sInput;
+                        aReturn.push("Would you like to order drinks?")
+                    }
+                    break;
             
             case OrderState.DRINKS:
                 this.isDone(true);
                 if(sInput.toLowerCase() != "no"){
                     this.sDrinks = sInput;
+                    // aReturn.push("Would you like to order anything else?")
                 }
+            
+
+                    
                 aReturn.push("Thank-you for your order of");
-                aReturn.push(`${this.sSize} ${this.sItem} with ${this.sToppings} and ${this.sItem2}, ${this.sItem3}`);
+                aReturn.push(`${this.sSize} ${this.sItem} with ${this.sToppings} and ${this.sItem2}, ${this.sItem3} nd ${this.sItem4}`);
                 if(this.sDrinks){
                     aReturn.push(this.sDrinks);
                 }
